@@ -25,7 +25,7 @@ const init = ({ ignoreError }) => {
     return newMethod
   }
 
-  const isSpy = (spy) => spy.calls && typeof spy.calls.count === 'function'
+  const isSpy = (spy) => spy && spy._isMockFunction
 
   const flushUnexpectedConsoleCalls = (mockMethod, methodName, unexpectedConsoleCallStacks) => {
     // eslint-disable-next-line no-console
