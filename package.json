@@ -1,0 +1,17 @@
+{
+  "name": "jest-fail-on-console",
+  "version": "1.0.0",
+  "description": "Utility to make jest tests fail when console.error() or console.warn() are used",
+  "main": "index.js",
+  "repository": "git@github.com:ricardo-ch/jest-fail-on-console.git",
+  "author": "Ricardo",
+  "license": "MIT",
+  "keywords": [
+    "jest",
+    "console",
+    "fail"
+  ],
+  "dependencies": {
+    "chalk": "^4.1.0"
+  }
+}
