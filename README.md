@@ -32,6 +32,17 @@ import failOnConsole from 'jest-fail-on-console'
 failOnConsole()
 ```
 
+## But I have some expected console errors/warning
+
+If a `console.error()` is expected, then you should assert for it:
+```ts
+test('should log an error', () => {
+  jest.spyOn(console, 'error').mockImplementation()
+  // do your logic
+  expect(console.error).toHaveBeenCalledWith('your error message')
+})
+```
+
 ## Options
 
 You can pass an object with options to the function:
