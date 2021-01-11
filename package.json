@@ -11,7 +11,13 @@
     "console",
     "fail"
   ],
+  "scripts": {
+    "npm:publish": "np"
+  },
   "dependencies": {
     "chalk": "^4.1.0"
+  },
+  "devDependencies": {
+    "np": "^7.2.0"
   }
 }
