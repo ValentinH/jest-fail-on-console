@@ -4,7 +4,8 @@ const chalk = require('chalk')
 const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = true }) => {
   const patchConsoleMethod = (methodName, unexpectedConsoleCallStacks) => {
     const newMethod = (format, ...args) => {
-      if (silenceMessage && silenceMessage(format, methodName)) {
+      const message = util.format(format, ...args)
+      if (silenceMessage && silenceMessage(message, methodName)) {
         return
       }
 
@@ -13,10 +14,7 @@ const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = tru
       // Don't throw yet though b'c it might be accidentally caught and suppressed.
       const { stack } = new Error()
       if (stack) {
-        unexpectedConsoleCallStacks.push([
-          stack.substr(stack.indexOf('\n') + 1),
-          util.format(format, ...args),
-        ])
+        unexpectedConsoleCallStacks.push([stack.substr(stack.indexOf('\n') + 1), message])
       }
     }
 
