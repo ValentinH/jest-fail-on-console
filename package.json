@@ -19,5 +19,12 @@
   },
   "devDependencies": {
     "np": "^7.2.0"
-  }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ]
 }
