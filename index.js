@@ -1,10 +1,10 @@
 const util = require('util')
 const chalk = require('chalk')
 
-const init = ({ ignoreError }) => {
+const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = true }) => {
   const patchConsoleMethod = (methodName, unexpectedConsoleCallStacks) => {
     const newMethod = (format, ...args) => {
-      if (ignoreError && ignoreError(format)) {
+      if (silenceMessage && silenceMessage(format, methodName)) {
         return
       }
 
@@ -66,12 +66,21 @@ const init = ({ ignoreError }) => {
   const unexpectedErrorCallStacks = []
   const unexpectedWarnCallStacks = []
 
-  const errorMethod = patchConsoleMethod('error', unexpectedErrorCallStacks)
-  const warnMethod = patchConsoleMethod('warn', unexpectedWarnCallStacks)
+  let errorMethod, warnMethod
+  if (shouldFailOnError) {
+    errorMethod = patchConsoleMethod('error', unexpectedErrorCallStacks)
+  }
+  if (shouldFailOnWarn) {
+    warnMethod = patchConsoleMethod('warn', unexpectedWarnCallStacks)
+  }
 
   const flushAllUnexpectedConsoleCalls = () => {
-    flushUnexpectedConsoleCalls(errorMethod, 'error', unexpectedErrorCallStacks)
-    flushUnexpectedConsoleCalls(warnMethod, 'warn', unexpectedWarnCallStacks)
+    if (shouldFailOnError) {
+      flushUnexpectedConsoleCalls(errorMethod, 'error', unexpectedErrorCallStacks)
+    }
+    if (shouldFailOnWarn) {
+      flushUnexpectedConsoleCalls(warnMethod, 'warn', unexpectedWarnCallStacks)
+    }
     unexpectedErrorCallStacks.length = 0
     unexpectedWarnCallStacks.length = 0
   }

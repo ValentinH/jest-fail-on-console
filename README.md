@@ -30,6 +30,11 @@ In a file used in the `setupFilesAfterEnv` option of Jest, add this code:
 import failOnConsole from 'jest-fail-on-console'
 
 failOnConsole()
+
+// or with options:
+failOnConsole({
+  shouldFailOnWarn: false,
+})
 ```
 
 ## But I have some expected console errors/warning
@@ -47,17 +52,32 @@ test('should log an error', () => {
 
 You can pass an object with options to the function:
 
-### ignoreError
+### shouldFailOnWarn
 
-Signature: `(errorMessage: string) => boolean`
+Use this to make a test fail when a warning is logged.
 
-This will be call for every error. If you return true, the test will not fail.
+- Type: `boolean`
+- Default: `true`
+
+### shouldFailOnError
+
+Use this to make a test fail when an error is logged.
+
+- Type: `boolean`
+- Default: `true`
+
+### silenceMessage
+
+- Signature: `(message: string, methodName: 'warn' | 'error') => boolean`
+
+This function is called for every console warn/error.
+If true is returned, the message will not show in the console and the test won't fail.
 
 Example:
 
 ```ts
 failOnConsole({
-  ignoreError: (errorMessage) => {
+  silenceMessage: (errorMessage) => {
     if (/Not implemented: navigation/.test(errorMessage)) {
       return true
     }

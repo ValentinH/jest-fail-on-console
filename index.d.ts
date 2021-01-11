@@ -1,5 +1,14 @@
 export type InitOptions = {
-  ignoreError?: (errorMessage: string) => boolean
+  /**
+   * This function is called for every console warn/error.
+   * If true is returned, the message will not show in the console
+   * and the test won't fail.
+   */
+  silenceMessage?: (message: string, methodName: 'warn' | 'error') => boolean
+  /** defaults to true */
+  shouldFailOnWarn?: boolean
+  /** defaults to true */
+  shouldFailOnError?: boolean
 }
 declare function init(options?: InitOptions): void
 
