@@ -1,7 +1,7 @@
 const util = require('util')
 const chalk = require('chalk')
 
-const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = true }) => {
+const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = true } = {}) => {
   const patchConsoleMethod = (methodName, unexpectedConsoleCallStacks) => {
     const newMethod = (format, ...args) => {
       const message = util.format(format, ...args)
