@@ -65,12 +65,6 @@ const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = tru
   const unexpectedWarnCallStacks = []
 
   let errorMethod, warnMethod
-  if (shouldFailOnError) {
-    errorMethod = patchConsoleMethod('error', unexpectedErrorCallStacks)
-  }
-  if (shouldFailOnWarn) {
-    warnMethod = patchConsoleMethod('warn', unexpectedWarnCallStacks)
-  }
 
   const flushAllUnexpectedConsoleCalls = () => {
     if (shouldFailOnError) {
@@ -84,6 +78,13 @@ const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = tru
   }
 
   const resetAllUnexpectedConsoleCalls = () => {
+    if (shouldFailOnError) {
+      errorMethod = patchConsoleMethod('error', unexpectedErrorCallStacks)
+    }
+    if (shouldFailOnWarn) {
+      warnMethod = patchConsoleMethod('warn', unexpectedWarnCallStacks)
+    }
+    
     unexpectedErrorCallStacks.length = 0
     unexpectedWarnCallStacks.length = 0
   }
