@@ -18,9 +18,16 @@ const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = tru
       }
     }
 
-    console[methodName] = newMethod // eslint-disable-line no-console
+		let spy
+		beforeEach(() => {
+			spy = jest.spyOn(console, methodName).mockImplementation(newMethod)
+		})
 
-    return newMethod
+		afterEach(() => {
+			spy.mockRestore()
+		})
+
+		return console[methodName]
   }
 
   const isSpy = (spy) => spy && spy._isMockFunction
@@ -65,6 +72,12 @@ const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = tru
   const unexpectedWarnCallStacks = []
 
   let errorMethod, warnMethod
+  if (shouldFailOnError) {
+    errorMethod = patchConsoleMethod('error', unexpectedErrorCallStacks)
+  }
+  if (shouldFailOnWarn) {
+    warnMethod = patchConsoleMethod('warn', unexpectedWarnCallStacks)
+  }
 
   const flushAllUnexpectedConsoleCalls = () => {
     if (shouldFailOnError) {
@@ -78,13 +91,6 @@ const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = tru
   }
 
   const resetAllUnexpectedConsoleCalls = () => {
-    if (shouldFailOnError) {
-      errorMethod = patchConsoleMethod('error', unexpectedErrorCallStacks)
-    }
-    if (shouldFailOnWarn) {
-      warnMethod = patchConsoleMethod('warn', unexpectedWarnCallStacks)
-    }
-    
     unexpectedErrorCallStacks.length = 0
     unexpectedWarnCallStacks.length = 0
   }
