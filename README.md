@@ -2,6 +2,8 @@
 
 Utility to make jest tests fail when console.error() or console.warn() are used
 
+[![version][version-badge]][package] [![Monthly downloads][npmstats-badge]][npmstats] [![MIT License][license-badge]][license] [![PRs Welcome][prs-badge]][prs]
+
 ## What problem is this solving?
 
 Jest doesn't fail the tests when there is a `console.error`. In large codebase, we can end up with the test output overloaded by a lot of errors and warnings.
@@ -89,3 +91,13 @@ failOnConsole({
 ## Credits
 
 Most of the logic is taken from [React's setupTests file](https://github.com/facebook/react/blob/master/scripts/jest/setupTests.js).
+
+[version-badge]: https://img.shields.io/npm/v/jest-fail-on-console.svg?style=flat-square
+[package]: https://www.npmjs.com/package/jest-fail-on-console
+[downloads-badge]: https://img.shields.io/npm/dm/jest-fail-on-console.svg?style=flat-square
+[npmstats]: http://npm-stat.com/charts.html?package=jest-fail-on-console
+[npmstats-badge]: https://img.shields.io/npm/dm/jest-fail-on-console.svg?style=flat-square
+[license-badge]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+[license]: https://github.com/ricardo-ch/jest-fail-on-console/blob/master/LICENSE
+[prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[prs]: http://makeapullrequest.com
