@@ -42,6 +42,7 @@ failOnConsole({
 ## But I have some expected console errors/warning
 
 If a `console.error()` is expected, then you should assert for it:
+
 ```ts
 test('should log an error', () => {
   jest.spyOn(console, 'error').mockImplementation()
@@ -67,6 +68,13 @@ Use this to make a test fail when an error is logged.
 
 - Type: `boolean`
 - Default: `true`
+
+### shouldFailOnLog
+
+Use this to make a test fail when a message is logged.
+
+- Type: `boolean`
+- Default: `false`
 
 ### silenceMessage
 

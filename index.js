@@ -1,7 +1,12 @@
 const util = require('util')
 const chalk = require('chalk')
 
-const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = true } = {}) => {
+const init = ({
+  silenceMessage,
+  shouldFailOnWarn = true,
+  shouldFailOnError = true,
+  shouldFailOnLog = false,
+} = {}) => {
   const patchConsoleMethod = (methodName, unexpectedConsoleCallStacks) => {
     const newMethod = (format, ...args) => {
       const message = util.format(format, ...args)
@@ -60,7 +65,7 @@ const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = tru
 
       const message =
         `Expected test not to call ${chalk.bold(`console.${methodName}()`)}.\n\n` +
-        `If the warning is expected, test for it explicitly by mocking it out using ${chalk.bold(
+        `If the ${methodName} is expected, test for it explicitly by mocking it out using ${chalk.bold(
           'jest.spyOn'
         )}(console, '${methodName}') and test that the warning occurs.`
 
@@ -70,13 +75,18 @@ const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = tru
 
   const unexpectedErrorCallStacks = []
   const unexpectedWarnCallStacks = []
+  const unexpectedLogCallStacks = []
 
-  let errorMethod, warnMethod
+  let errorMethod, warnMethod, logMethod
+
   if (shouldFailOnError) {
     errorMethod = patchConsoleMethod('error', unexpectedErrorCallStacks)
   }
   if (shouldFailOnWarn) {
     warnMethod = patchConsoleMethod('warn', unexpectedWarnCallStacks)
+  }
+  if (shouldFailOnLog) {
+    logMethod = patchConsoleMethod('log', unexpectedLogCallStacks)
   }
 
   const flushAllUnexpectedConsoleCalls = () => {
@@ -86,13 +96,18 @@ const init = ({ silenceMessage, shouldFailOnWarn = true, shouldFailOnError = tru
     if (shouldFailOnWarn) {
       flushUnexpectedConsoleCalls(warnMethod, 'warn', unexpectedWarnCallStacks)
     }
+    if (shouldFailOnLog) {
+      flushUnexpectedConsoleCalls(logMethod, 'log', unexpectedLogCallStacks)
+    }
     unexpectedErrorCallStacks.length = 0
     unexpectedWarnCallStacks.length = 0
+    unexpectedLogCallStacks.length = 0
   }
 
   const resetAllUnexpectedConsoleCalls = () => {
     unexpectedErrorCallStacks.length = 0
     unexpectedWarnCallStacks.length = 0
+    unexpectedLogCallStacks.length = 0
   }
 
   beforeEach(resetAllUnexpectedConsoleCalls)
