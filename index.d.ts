@@ -14,4 +14,4 @@ export type InitOptions = {
 }
 declare function init(options?: InitOptions): void
 
-export default init
+export = init
