@@ -12,6 +12,12 @@ declare namespace init {
     shouldFailOnError?: boolean
     /** defaults to false */
     shouldFailOnLog?: boolean
+    /**
+     * This function lets you define a custom error message. The methodName is the method
+     * that caused the error, bold is a function that lets you bold subsets of your message.
+     * example: (methodName, bold) => `console.${methodName} is not ${bold('allowed')}`
+     */
+    errorMessage?: (methodName: string, bold: (string) => string) => string
   }
 }
 

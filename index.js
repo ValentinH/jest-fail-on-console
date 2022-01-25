@@ -1,11 +1,18 @@
 const util = require('util')
 const chalk = require('chalk')
 
+const defaultErrorMessage = (methodName, bold) =>
+  `Expected test not to call ${bold(`console.${methodName}()`)}.\n\n` +
+  `If the ${methodName} is expected, test for it explicitly by mocking it out using ${bold(
+    'jest.spyOn'
+  )}(console, '${methodName}').mockImplementation() and test that the warning occurs.`
+
 const init = ({
   silenceMessage,
   shouldFailOnWarn = true,
   shouldFailOnError = true,
   shouldFailOnLog = false,
+  errorMessage = defaultErrorMessage,
 } = {}) => {
   const patchConsoleMethod = (methodName, unexpectedConsoleCallStacks) => {
     const newMethod = (format, ...args) => {
@@ -41,7 +48,7 @@ const init = ({
     // eslint-disable-next-line no-console
     if (console[methodName] !== mockMethod && !isSpy(console[methodName])) {
       throw new Error(`Test did not tear down console.${methodName} mock properly.
-    
+
     If you are trying to disable the "fail on console" mechanism, you should use beforeEach/afterEach
     instead of beforeAll/afterAll
     `)
@@ -63,11 +70,7 @@ const init = ({
         )
       })
 
-      const message =
-        `Expected test not to call ${chalk.bold(`console.${methodName}()`)}.\n\n` +
-        `If the ${methodName} is expected, test for it explicitly by mocking it out using ${chalk.bold(
-          'jest.spyOn'
-        )}(console, '${methodName}') and test that the warning occurs.`
+      const message = errorMessage(methodName, chalk.bold)
 
       throw new Error(`${message}\n\n${messages.join('\n\n')}`)
     }
