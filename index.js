@@ -30,16 +30,16 @@ const init = ({
       }
     }
 
-		let spy
-		beforeEach(() => {
-			spy = jest.spyOn(console, methodName).mockImplementation(newMethod)
-		})
+    let originalMethod = console[methodName]
+    beforeEach(() => {
+      console[methodName] = newMethod // eslint-disable-line no-console
+    })
 
-		afterEach(() => {
-			spy.mockRestore()
-		})
+    afterEach(() => {
+      console[methodName] = originalMethod
+    })
 
-		return console[methodName]
+    return console[methodName]
   }
 
   const isSpy = (spy) => spy && spy._isMockFunction
