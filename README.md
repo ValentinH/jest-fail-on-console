@@ -96,6 +96,13 @@ failOnConsole({
 })
 ```
 
+### errorMessage
+
+Use this if you want to override the default error message of this library.
+
+- Signature: `(methodName: string, bold: (string) => string) => string`
+
+
 ## Credits
 
 Most of the logic is taken from [React's setupTests file](https://github.com/facebook/react/blob/master/scripts/jest/setupTests.js).
