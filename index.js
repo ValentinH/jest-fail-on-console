@@ -14,46 +14,7 @@ const init = ({
   shouldFailOnLog = false,
   errorMessage = defaultErrorMessage,
 } = {}) => {
-  const patchConsoleMethod = (methodName, unexpectedConsoleCallStacks) => {
-    const newMethod = (format, ...args) => {
-      const message = util.format(format, ...args)
-      if (silenceMessage && silenceMessage(message, methodName)) {
-        return
-      }
-
-      // Capture the call stack now so we can warn about it later.
-      // The call stack has helpful information for the test author.
-      // Don't throw yet though b'c it might be accidentally caught and suppressed.
-      const { stack } = new Error()
-      if (stack) {
-        unexpectedConsoleCallStacks.push([stack.substr(stack.indexOf('\n') + 1), message])
-      }
-    }
-
-    let originalMethod = console[methodName]
-    beforeEach(() => {
-      console[methodName] = newMethod // eslint-disable-line no-console
-    })
-
-    afterEach(() => {
-      console[methodName] = originalMethod
-    })
-
-    return console[methodName]
-  }
-
-  const isSpy = (spy) => spy && spy._isMockFunction
-
-  const flushUnexpectedConsoleCalls = (mockMethod, methodName, unexpectedConsoleCallStacks) => {
-    // eslint-disable-next-line no-console
-    if (console[methodName] !== mockMethod && !isSpy(console[methodName])) {
-      throw new Error(`Test did not tear down console.${methodName} mock properly.
-
-    If you are trying to disable the "fail on console" mechanism, you should use beforeEach/afterEach
-    instead of beforeAll/afterAll
-    `)
-    }
-
+  const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
     if (unexpectedConsoleCallStacks.length > 0) {
       const messages = unexpectedConsoleCallStacks.map(([stack, message]) => {
         const stackLines = stack.split('\n')
@@ -76,45 +37,46 @@ const init = ({
     }
   }
 
-  const unexpectedErrorCallStacks = []
-  const unexpectedWarnCallStacks = []
-  const unexpectedLogCallStacks = []
+  const patchConsoleMethod = (methodName) => {
+    const unexpectedConsoleCallStacks = []
 
-  let errorMethod, warnMethod, logMethod
+    const newMethod = (format, ...args) => {
+      const message = util.format(format, ...args)
+      if (silenceMessage && silenceMessage(message, methodName)) {
+        return
+      }
+
+      // Capture the call stack now so we can warn about it later.
+      // The call stack has helpful information for the test author.
+      // Don't throw yet though b'c it might be accidentally caught and suppressed.
+      const { stack } = new Error()
+      if (stack) {
+        unexpectedConsoleCallStacks.push([stack.substr(stack.indexOf('\n') + 1), message])
+      }
+    }
+
+    let originalMethod = console[methodName]
+
+    beforeEach(() => {
+      console[methodName] = newMethod // eslint-disable-line no-console
+      unexpectedConsoleCallStacks.length = 0
+    })
+
+    afterEach(() => {
+      flushUnexpectedConsoleCalls(methodName, unexpectedConsoleCallStacks)
+      console[methodName] = originalMethod
+    })
+  }
 
   if (shouldFailOnError) {
-    errorMethod = patchConsoleMethod('error', unexpectedErrorCallStacks)
+    patchConsoleMethod('error')
   }
   if (shouldFailOnWarn) {
-    warnMethod = patchConsoleMethod('warn', unexpectedWarnCallStacks)
+    patchConsoleMethod('warn')
   }
   if (shouldFailOnLog) {
-    logMethod = patchConsoleMethod('log', unexpectedLogCallStacks)
+    patchConsoleMethod('log')
   }
-
-  const flushAllUnexpectedConsoleCalls = () => {
-    if (shouldFailOnError) {
-      flushUnexpectedConsoleCalls(errorMethod, 'error', unexpectedErrorCallStacks)
-    }
-    if (shouldFailOnWarn) {
-      flushUnexpectedConsoleCalls(warnMethod, 'warn', unexpectedWarnCallStacks)
-    }
-    if (shouldFailOnLog) {
-      flushUnexpectedConsoleCalls(logMethod, 'log', unexpectedLogCallStacks)
-    }
-    unexpectedErrorCallStacks.length = 0
-    unexpectedWarnCallStacks.length = 0
-    unexpectedLogCallStacks.length = 0
-  }
-
-  const resetAllUnexpectedConsoleCalls = () => {
-    unexpectedErrorCallStacks.length = 0
-    unexpectedWarnCallStacks.length = 0
-    unexpectedLogCallStacks.length = 0
-  }
-
-  beforeEach(resetAllUnexpectedConsoleCalls)
-  afterEach(flushAllUnexpectedConsoleCalls)
 }
 
 module.exports = init
