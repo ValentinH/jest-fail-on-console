@@ -5,9 +5,9 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ricardo-ch/jest-fail-on-console.git"
+    "url": "https://github.com/ValentinH/jest-fail-on-console.git"
   },
-  "author": "Ricardo",
+  "author": "Valentin Hervieu",
   "license": "MIT",
   "keywords": [
     "jest",

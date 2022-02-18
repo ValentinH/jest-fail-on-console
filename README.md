@@ -102,6 +102,16 @@ Use this if you want to override the default error message of this library.
 
 - Signature: `(methodName: string, bold: (string) => string) => string`
 
+## License
+
+[MIT](https://github.com/ValentinH/jest-fail-on-console/blob/master/LICENSE)
+
+## Maintainers
+
+This project is maintained by Valentin Hervieu.
+
+This project was originally part of [@ricardo-ch](https://github.com/ricardo-ch/) organisation because I (Valentin) was working at Ricardo.
+After leaving this company, they gracefully accepted to transfer the project to me. ❤️
 
 ## Credits
 
@@ -113,6 +123,6 @@ Most of the logic is taken from [React's setupTests file](https://github.com/fac
 [npmstats]: http://npm-stat.com/charts.html?package=jest-fail-on-console
 [npmstats-badge]: https://img.shields.io/npm/dm/jest-fail-on-console.svg?style=flat-square
 [license-badge]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
-[license]: https://github.com/ricardo-ch/jest-fail-on-console/blob/master/LICENSE
+[license]: https://github.com/ValentinH/jest-fail-on-console/blob/master/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com
