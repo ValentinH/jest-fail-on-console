@@ -12,6 +12,8 @@ declare namespace init {
     shouldFailOnError?: boolean
     /** defaults to false */
     shouldFailOnLog?: boolean
+    /** defaults to false */
+    shouldFailOnAssert?: boolean
     /**
      * This function lets you define a custom error message. The methodName is the method
      * that caused the error, bold is a function that lets you bold subsets of your message.
