@@ -56,10 +56,6 @@ const init = ({
       }
     }
 
-    const newLoggingMethod = (format, ...args) => {
-      captureMessage(format, ...args)
-    }
-
     const newAssertMethod = (assertion, format, ...args) => {
       if (!assertion) {
         return
@@ -68,7 +64,7 @@ const init = ({
       captureMessage(format, ...args)
     }
 
-    const newMethod = methodName === 'assert' ? newAssertMethod : newLoggingMethod
+    const newMethod = methodName === 'assert' ? newAssertMethod : captureMessage
 
     let originalMethod = console[methodName]
 
