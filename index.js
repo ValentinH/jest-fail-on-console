@@ -12,6 +12,7 @@ const init = ({
   shouldFailOnWarn = true,
   shouldFailOnError = true,
   shouldFailOnLog = false,
+  shouldFailOnAssert = false,
   errorMessage = defaultErrorMessage,
 } = {}) => {
   const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
@@ -40,7 +41,7 @@ const init = ({
   const patchConsoleMethod = (methodName) => {
     const unexpectedConsoleCallStacks = []
 
-    const newMethod = (format, ...args) => {
+    const captureMessage = (format, ...args) => {
       const message = util.format(format, ...args)
       if (silenceMessage && silenceMessage(message, methodName)) {
         return
@@ -54,6 +55,16 @@ const init = ({
         unexpectedConsoleCallStacks.push([stack.substr(stack.indexOf('\n') + 1), message])
       }
     }
+
+    const newAssertMethod = (assertion, format, ...args) => {
+      if (!assertion) {
+        return
+      }
+
+      captureMessage(format, ...args)
+    }
+
+    const newMethod = methodName === 'assert' ? newAssertMethod : captureMessage
 
     let originalMethod = console[methodName]
 
@@ -76,6 +87,9 @@ const init = ({
   }
   if (shouldFailOnLog) {
     patchConsoleMethod('log')
+  }
+  if (shouldFailOnAssert) {
+    patchConsoleMethod('assert')
   }
 }
 
