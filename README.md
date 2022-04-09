@@ -1,15 +1,16 @@
 # jest-fail-on-console
 
-Utility to make jest tests fail when console.error() or console.warn() are used
+Utility to make jest tests fail when `console.error()`, `console.warn()`, etc. are used
 
 [![version][version-badge]][package] [![Monthly downloads][npmstats-badge]][npmstats] [![MIT License][license-badge]][license] [![PRs Welcome][prs-badge]][prs]
 
 ## What problem is this solving?
 
-Jest doesn't fail the tests when there is a `console.error`. In large codebase, we can end up with the test output overloaded by a lot of errors and warnings.
-To prevent this, we want to fail each test that is logging an error or a warning to the console. We also want to conserve a clear output of the original error.
+Jest doesn't fail the tests when there is a `console.error`. In large codebase, we can end up with the test output overloaded by a lot of errors, warnings, etc..
+To prevent this, we want to fail each test that is logging to the console. We also want to conserve a clear output of the original error.
 
 This is what this utility is doing.
+
 ![image](https://user-images.githubusercontent.com/2678610/104045400-cbe05b80-51de-11eb-820c-b96190bbff7f.png)
 
 ## Install
@@ -55,33 +56,72 @@ test('should log an error', () => {
 
 You can pass an object with options to the function:
 
-### shouldFailOnWarn
+### errorMessage
 
-Use this to make a test fail when a warning is logged.
+Use this if you want to override the default error message of this library.
 
-- Type: `boolean`
-- Default: `true`
+```ts
+// signature
+type errorMessage = (
+  methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn',
+  bold: (string) => string
+) => string
+```
 
-### shouldFailOnError
+### shouldFailOnAssert
 
-Use this to make a test fail when an error is logged.
-
-- Type: `boolean`
-- Default: `true`
-
-### shouldFailOnLog
-
-Use this to make a test fail when a message is logged.
+Use this to make a test fail when a `console.assert()` is logged.
 
 - Type: `boolean`
 - Default: `false`
 
+### shouldFailOnDebug
+
+Use this to make a test fail when a `console.debug()` is logged.
+
+- Type: `boolean`
+- Default: `false`
+
+### shouldFailOnError
+
+Use this to make a test fail when a `console.error()` is logged.
+
+- Type: `boolean`
+- Default: `true`
+
+### shouldFailOnInfo
+
+Use this to make a test fail when a `console.info()` is logged.
+
+- Type: `boolean`
+- Default: `false`
+
+### shouldFailOnLog
+
+Use this to make a test fail when a `console.log()` is logged.
+
+- Type: `boolean`
+- Default: `false`
+
+### shouldFailOnWarn
+
+Use this to make a test fail when a `console.warn()` is logged.
+
+- Type: `boolean`
+- Default: `true`
+
 ### silenceMessage
 
-- Signature: `(message: string, methodName: 'warn' | 'error') => boolean`
+```ts
+// signature
+type silenceMessage = (
+  message: string,
+  methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn'
+) => boolean
+```
 
-This function is called for every console warn/error.
-If true is returned, the message will not show in the console and the test won't fail.
+This function is called for every console method supported by this utility.
+If `true` is returned, the message will not show in the console and the test won't fail.
 
 Example:
 
@@ -95,12 +135,6 @@ failOnConsole({
   },
 })
 ```
-
-### errorMessage
-
-Use this if you want to override the default error message of this library.
-
-- Signature: `(methodName: string, bold: (string) => string) => string`
 
 ## License
 

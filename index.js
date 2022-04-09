@@ -8,12 +8,14 @@ const defaultErrorMessage = (methodName, bold) =>
   )}(console, '${methodName}').mockImplementation() and test that the warning occurs.`
 
 const init = ({
-  silenceMessage,
-  shouldFailOnWarn = true,
-  shouldFailOnError = true,
-  shouldFailOnLog = false,
-  shouldFailOnAssert = false,
   errorMessage = defaultErrorMessage,
+  shouldFailOnAssert = false,
+  shouldFailOnDebug = false,
+  shouldFailOnError = true,
+  shouldFailOnInfo = false,
+  shouldFailOnLog = false,
+  shouldFailOnWarn = true,
+  silenceMessage,
 } = {}) => {
   const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
     if (unexpectedConsoleCallStacks.length > 0) {
@@ -79,18 +81,12 @@ const init = ({
     })
   }
 
-  if (shouldFailOnError) {
-    patchConsoleMethod('error')
-  }
-  if (shouldFailOnWarn) {
-    patchConsoleMethod('warn')
-  }
-  if (shouldFailOnLog) {
-    patchConsoleMethod('log')
-  }
-  if (shouldFailOnAssert) {
-    patchConsoleMethod('assert')
-  }
+  if (shouldFailOnAssert) patchConsoleMethod('assert')
+  if (shouldFailOnDebug) patchConsoleMethod('debug')
+  if (shouldFailOnError) patchConsoleMethod('error')
+  if (shouldFailOnInfo) patchConsoleMethod('info')
+  if (shouldFailOnLog) patchConsoleMethod('log')
+  if (shouldFailOnWarn) patchConsoleMethod('warn')
 }
 
 module.exports = init
