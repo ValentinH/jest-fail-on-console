@@ -1,7 +1,7 @@
 const fs = require('fs').promises
 const { exec } = require('child_process')
 
-const fixturesDirectory = 'tst/fixtures'
+const fixturesDirectory = 'tests/fixtures'
 const runFixture = async (fixtureName) => {
   const testFilePath = `./${fixturesDirectory}/${fixtureName}/index.test.js`
   const configFilePath = `./${fixturesDirectory}/${fixtureName}/jest.config.js`

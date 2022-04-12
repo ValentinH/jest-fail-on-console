@@ -1,6 +1,6 @@
 const consoleError = require('.')
 
-describe('console.assert failure', () => {
+describe('console.error', () => {
   it('does throw', () => {
     expect(consoleError).not.toThrow()
   })

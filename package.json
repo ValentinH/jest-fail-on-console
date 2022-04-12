@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "npm:publish": "np",
-    "test": "jest tst/index.test.js"
+    "test": "jest tests/index.test.js"
   },
   "dependencies": {
     "chalk": "^4.1.0"

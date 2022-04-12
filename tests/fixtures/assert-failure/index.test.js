@@ -1,7 +1,7 @@
-const assertSuccess = require('.')
+const assertFailure = require('.')
 
 describe('console.assert failure', () => {
   it('does not throw', () => {
-    expect(assertSuccess).not.toThrow()
+    expect(assertFailure).not.toThrow()
   })
 })
