@@ -59,7 +59,7 @@ const init = ({
     }
 
     const newAssertMethod = (assertion, format, ...args) => {
-      if (!assertion) {
+      if (assertion) {
         return
       }
 
