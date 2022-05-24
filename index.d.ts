@@ -7,7 +7,7 @@ declare namespace init {
      */
     errorMessage?: (
       methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn',
-      bold: (string) => string
+      bold: (string: string) => string
     ) => string
 
     /** @default false */
