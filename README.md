@@ -64,7 +64,7 @@ Use this if you want to override the default error message of this library.
 // signature
 type errorMessage = (
   methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn',
-  bold: (string) => string
+  bold: (string: string) => string
 ) => string
 ```
 
