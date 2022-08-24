@@ -136,16 +136,6 @@ failOnConsole({
 })
 ```
 
-### skipTestNames
-
-Use this if you want to ignore checks introduced by this library for specific test names.
-
-```ts
-failOnConsole({
-  skipTestNames: ['TEST_NAME'],
-})
-```
-
 ### skipTest
 
 Use this if you want to ignore checks introduced by this library for specific tests determined by

@@ -39,11 +39,6 @@ declare namespace init {
     ) => boolean
 
     /**
-     * This parameter lets you define a list of test names to skip console checks for.
-     */
-    skipTestNames?: string[]
-
-    /**
      * This function is called for every test setup and teardown to determine if the test should
      * skip console checks from this package or not.
      */

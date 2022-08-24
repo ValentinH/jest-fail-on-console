@@ -15,7 +15,6 @@ const init = ({
   shouldFailOnInfo = false,
   shouldFailOnLog = false,
   shouldFailOnWarn = true,
-  skipTestNames = [],
   skipTest,
   silenceMessage,
 } = {}) => {
@@ -77,7 +76,6 @@ const init = ({
       const testName = currentTestState.currentTestName
       const testPath = currentTestState.testPath
 
-      if (skipTestNames.includes(testName)) return true
       if (skipTest && skipTest({ testName, testPath })) return true
 
       return false
