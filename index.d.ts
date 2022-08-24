@@ -47,7 +47,7 @@ declare namespace init {
      * This function is called for every test setup and teardown to determine if the test should
      * skip console checks from this package or not.
      */
-    skipTests?: ({ testName: string, testPath: string }) => boolean
+    skipTest?: ({ testName: string, testPath: string }) => boolean
   }
 }
 

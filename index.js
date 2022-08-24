@@ -16,7 +16,7 @@ const init = ({
   shouldFailOnLog = false,
   shouldFailOnWarn = true,
   skipTestNames = [],
-  skipTests,
+  skipTest,
   silenceMessage,
 } = {}) => {
   const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
@@ -78,7 +78,7 @@ const init = ({
       const testPath = currentTestState.testPath
 
       if (skipTestNames.includes(testName)) return true
-      if (skipTests && skipTests({ testName, testPath })) return true
+      if (skipTest && skipTest({ testName, testPath })) return true
 
       return false
     }
