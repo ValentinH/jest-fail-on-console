@@ -136,6 +136,16 @@ failOnConsole({
 })
 ```
 
+### skipTestNames
+
+Use this if you want to ignore checks introduced by this library for specific test names.
+
+```ts
+failOnConsole({
+  skipTestNames: ['TEST_NAME'],
+})
+```
+
 ## License
 
 [MIT](https://github.com/ValentinH/jest-fail-on-console/blob/master/LICENSE)
