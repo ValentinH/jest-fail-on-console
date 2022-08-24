@@ -41,7 +41,7 @@ declare namespace init {
     /**
      * This parameter lets you define a list of test names to skip console checks for.
      */
-    skipTestNames?: []
+    skipTestNames?: string[]
   }
 }
 
