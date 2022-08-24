@@ -73,20 +73,20 @@ const init = ({
     let originalMethod = console[methodName]
 
     const currentTestState = expect.getState()
-    const currentTestName = currentTestState.currentTestName
-    const currentTestPath = currentTestState.testPath
+    const testName = currentTestState.currentTestName
+    const testPath = currentTestState.testPath
 
     beforeEach(() => {
-      if (skipTestNames.includes(currentTestName)) return
-      if (skipTests && skipTests(currentTestName, currentTestPath)) return
+      if (skipTestNames.includes(testName)) return
+      if (skipTests && skipTests({ testName, testPath })) return
 
       console[methodName] = newMethod // eslint-disable-line no-console
       unexpectedConsoleCallStacks.length = 0
     })
 
     afterEach(() => {
-      if (skipTestNames.includes(currentTestName)) return
-      if (skipTests && skipTests(currentTestName, currentTestPath)) return
+      if (skipTestNames.includes(testName)) return
+      if (skipTests && skipTests({ testName, testPath })) return
 
       flushUnexpectedConsoleCalls(methodName, unexpectedConsoleCallStacks)
       console[methodName] = originalMethod
