@@ -37,6 +37,11 @@ declare namespace init {
       message: string,
       methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn'
     ) => boolean
+
+    /**
+     * This parameter lets you define a list of test names to skip console checks for.
+     */
+    skipTestNames?: []
   }
 }
 
