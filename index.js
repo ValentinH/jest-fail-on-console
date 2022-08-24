@@ -16,6 +16,7 @@ const init = ({
   shouldFailOnLog = false,
   shouldFailOnWarn = true,
   skipTestNames = [],
+  skipTests,
   silenceMessage,
 } = {}) => {
   const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
@@ -71,14 +72,22 @@ const init = ({
 
     let originalMethod = console[methodName]
 
+    const currentTestState = expect.getState()
+    const currentTestName = currentTestState.currentTestName
+    const currentTestPath = currentTestState.testPath
+
     beforeEach(() => {
-      if (skipTestNames.includes(expect.getState().currentTestName)) return
+      if (skipTestNames.includes(currentTestName)) return
+      if (skipTests && skipTests(currentTestName, currentTestPath)) return
+
       console[methodName] = newMethod // eslint-disable-line no-console
       unexpectedConsoleCallStacks.length = 0
     })
 
     afterEach(() => {
-      if (skipTestNames.includes(expect.getState().currentTestName)) return
+      if (skipTestNames.includes(currentTestName)) return
+      if (skipTests && skipTests(currentTestName, currentTestPath)) return
+
       flushUnexpectedConsoleCalls(methodName, unexpectedConsoleCallStacks)
       console[methodName] = originalMethod
     })
