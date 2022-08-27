@@ -136,13 +136,23 @@ failOnConsole({
 })
 ```
 
-### skipTestNames
+### skipTest
 
-Use this if you want to ignore checks introduced by this library for specific test names.
+Use this if you want to ignore checks introduced by this library for specific tests determined by
+the return of the callback function. Return `false` if you do not want to skip console checks for
+the specific test and return `true` if you would like to skip it.
 
 ```ts
+const ignoreList = [/.*components\/SomeComponent.test.tsx/]
+
 failOnConsole({
-  skipTestNames: ['TEST_NAME'],
+  skipTest: ({ testPath }) => {
+    for (const pathExp of ignoreList) {
+      const result = pathExp.test(testPath)
+      if (result) return true
+    }
+    return false
+  },
 })
 ```
 
