@@ -16,14 +16,16 @@
   ],
   "scripts": {
     "npm:publish": "np",
-    "test": "jest tests/index.test.js"
+    "test": "jest tests/index.test.js",
+    "type-check": "tsc --noEmit index.d.ts"
   },
   "dependencies": {
     "chalk": "^4.1.0"
   },
   "devDependencies": {
     "jest": "^27.5.1",
-    "np": "^7.2.0"
+    "np": "^7.2.0",
+    "typescript": "^4.8.2"
   },
   "files": [
     "index.js",
