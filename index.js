@@ -80,9 +80,10 @@ const init = ({
 
       return false
     }
-    const shouldSkipTest = canSkipTest()
+    let shouldSkipTest;
 
     beforeEach(() => {
+      shouldSkipTest = canSkipTest();
       if (shouldSkipTest) return
 
       console[methodName] = newMethod // eslint-disable-line no-console

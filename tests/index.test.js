@@ -29,10 +29,16 @@ describe('jest-fail-on-console', () => {
     expect(stderr).toEqual(expect.stringContaining(passString('error-disabled')))
   })
 
-  it('does not error when console.error() is called and skip test returns true', async () => {
+  it('does not error when console.error() is called and skip test by test file path returns true', async () => {
     const { stderr } = await runFixture('error-skip-test')
 
     expect(stderr).toEqual(expect.stringContaining(passString('error-skip-test')))
+  })
+
+  it('does not error when console.error() is called and skip test by test name returns true', async () => {
+    const { stderr } = await runFixture('error-skip-test-by-name')
+
+    expect(stderr).toEqual(expect.stringContaining(passString('error-skip-test-by-name')))
   })
 
   it('errors when console.assert() is called with a failing assertion', async () => {

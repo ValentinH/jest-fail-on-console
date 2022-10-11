@@ -144,13 +144,19 @@ the specific test and return `true` if you would like to skip it.
 
 ```ts
 const ignoreList = [/.*components\/SomeComponent.test.tsx/]
+const ignoreNameList = ['some component some test name']
 
 failOnConsole({
-  skipTest: ({ testPath }) => {
+  skipTest: ({ testPath, testName }) => {
     for (const pathExp of ignoreList) {
       const result = pathExp.test(testPath)
       if (result) return true
     }
+
+    if (ignoreNameList.includes(testName)) {
+      return true
+    }
+    
     return false
   },
 })
