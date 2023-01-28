@@ -24,8 +24,9 @@ const init = ({
         const stackLines = stack.split('\n')
         return (
           `${chalk.red(message)}\n` +
-          `${stackLines
-            .map((line, index) => {
+          `${process.argv.indexOf("--noStackTrace") !== -1
+            ? chalk.white(stackLines.slice(-1))
+            : stackLines.map( (line, index) => {
               if (index === stackLines.length - 1) {
                 return chalk.white(line)
               }
