@@ -2,7 +2,8 @@
 
 Utility to make jest tests fail when `console.error()`, `console.warn()`, etc. are used
 
-[![version][version-badge]][package] [![Monthly downloads][npmstats-badge]][npmstats] [![MIT License][license-badge]][license] [![PRs Welcome][prs-badge]][prs]
+[![version][version-badge]][package] [![MIT License][license-badge]][license] [![PRs Welcome][prs-badge]][prs]
+
 
 ## What problem is this solving?
 
@@ -12,6 +13,10 @@ To prevent this, we want to fail each test that is logging to the console. We al
 This is what this utility is doing.
 
 ![image](https://user-images.githubusercontent.com/2678610/104045400-cbe05b80-51de-11eb-820c-b96190bbff7f.png)
+
+## Downloads
+
+[![jest-fail-on-console npminsights.com](https://npminsights.com/api/package/readme-image/jest-fail-on-console?v=2023-02-22)](https://npminsights.com/package/jest-fail-on-console)
 
 ## Install
 
