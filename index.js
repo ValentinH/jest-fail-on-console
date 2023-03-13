@@ -15,25 +15,30 @@ const init = ({
   shouldFailOnInfo = false,
   shouldFailOnLog = false,
   shouldFailOnWarn = true,
+  disableStacktrace = false,
   skipTest,
   silenceMessage,
 } = {}) => {
   const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
+    const disableStackTraceMessage =
+      "('disableStacktrace' option is enabled. No additional stacktrace will be shown.)"
     if (unexpectedConsoleCallStacks.length > 0) {
-      const messages = unexpectedConsoleCallStacks.map(([stack, message]) => {
-        const stackLines = stack.split('\n')
-        return (
-          `${chalk.red(message)}\n` +
-          `${stackLines
-            .map((line, index) => {
-              if (index === stackLines.length - 1) {
-                return chalk.white(line)
-              }
-              return chalk.gray(line)
-            })
-            .join('\n')}`
-        )
-      })
+      const messages = disableStacktrace
+        ? [disableStackTraceMessage]
+        : unexpectedConsoleCallStacks.map(([stack, message]) => {
+            const stackLines = stack.split('\n')
+            return (
+              `${chalk.red(message)}\n` +
+              `${stackLines
+                .map((line, index) => {
+                  if (index === stackLines.length - 1) {
+                    return chalk.white(line)
+                  }
+                  return chalk.gray(line)
+                })
+                .join('\n')}`
+            )
+          })
 
       const message = errorMessage(methodName, chalk.bold)
 
@@ -80,10 +85,10 @@ const init = ({
 
       return false
     }
-    let shouldSkipTest;
+    let shouldSkipTest
 
     beforeEach(() => {
-      shouldSkipTest = canSkipTest();
+      shouldSkipTest = canSkipTest()
       if (shouldSkipTest) return
 
       console[methodName] = newMethod // eslint-disable-line no-console

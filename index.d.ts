@@ -28,6 +28,9 @@ declare namespace init {
     /** @default true */
     shouldFailOnWarn?: boolean
 
+    /** @default false */
+    disableStacktrace?: boolean
+
     /**
      * This function is called for every console warn/error.
      * If true is returned, the message will not show in the console
