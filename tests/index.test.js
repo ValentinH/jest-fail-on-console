@@ -52,4 +52,11 @@ describe('jest-fail-on-console', () => {
 
     expect(stderr).toEqual(expect.stringContaining(passString('assert-success')))
   })
+
+  it('does not print a stacktrace when disableStacktrace is true', async () => {
+    const { stderr } = await runFixture('option-disable-stacktrace')
+
+    expect(stderr).toEqual(expect.stringContaining('No additional stacktrace will be shown.'))
+    expect(stderr.length).toBeLessThan(1100); // Short output is the main point of this test
+  })
 })
