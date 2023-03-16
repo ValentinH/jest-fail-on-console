@@ -40,13 +40,15 @@ const init = ({
       throw new Error(`${message}\n\n${messages.join('\n\n')}`)
     }
   }
+  const groups = [];
 
   const patchConsoleMethod = (methodName) => {
     const unexpectedConsoleCallStacks = []
 
     const captureMessage = (format, ...args) => {
       const message = util.format(format, ...args)
-      if (silenceMessage && silenceMessage(message, methodName)) {
+
+      if (silenceMessage && silenceMessage(message, methodName, { group: groups[groups.length - 1], groups })) {
         return
       }
 
@@ -67,7 +69,22 @@ const init = ({
       captureMessage(format, ...args)
     }
 
-    const newMethod = methodName === 'assert' ? newAssertMethod : captureMessage
+    const newGroupMethod = (label) => {
+      groups.push(label || '')
+    }
+
+    const newGroupEndMethod = () => {
+      groups.pop()
+    }
+
+    const methods = {
+      assert: newAssertMethod,
+      group: newGroupMethod,
+      groupCollapsed: newGroupMethod,
+      groupEnd: newGroupEndMethod,
+    }
+
+    const newMethod = methods[methodName] || captureMessage
 
     let originalMethod = console[methodName]
 
@@ -98,12 +115,19 @@ const init = ({
     })
   }
 
+  beforeEach(() => {
+    groups.length = 0
+  })
+
   if (shouldFailOnAssert) patchConsoleMethod('assert')
   if (shouldFailOnDebug) patchConsoleMethod('debug')
   if (shouldFailOnError) patchConsoleMethod('error')
   if (shouldFailOnInfo) patchConsoleMethod('info')
   if (shouldFailOnLog) patchConsoleMethod('log')
   if (shouldFailOnWarn) patchConsoleMethod('warn')
+  patchConsoleMethod('group')
+  patchConsoleMethod('groupCollapsed')
+  patchConsoleMethod('groupEnd')
 }
 
 module.exports = init
