@@ -121,7 +121,8 @@ Use this to make a test fail when a `console.warn()` is logged.
 // signature
 type silenceMessage = (
   message: string,
-  methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn'
+  methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn',
+  context: { group: string, groups: string[] }
 ) => boolean
 ```
 

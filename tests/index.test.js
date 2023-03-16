@@ -52,4 +52,28 @@ describe('jest-fail-on-console', () => {
 
     expect(stderr).toEqual(expect.stringContaining(passString('assert-success')))
   })
+
+  it('does not error if message is silenced with `silenceMessage`', async () => {
+    const { stderr } = await runFixture('silence-by-message')
+
+    expect(stderr).toEqual(expect.stringContaining(passString('silence-by-message')))
+  })
+
+  it('does not error if message is silenced with `silenceMessage` based on console method', async () => {
+    const { stderr } = await runFixture('silence-by-method')
+
+    expect(stderr).toEqual(expect.stringContaining(passString('silence-by-method')))
+  })
+
+  it('does not error if message is silenced with `silenceMessage` based on group context', async () => {
+    const { stderr } = await runFixture('silence-by-group')
+
+    expect(stderr).toEqual(expect.stringContaining(passString('silence-by-group')))
+  })
+
+  it('does not error if message is silenced with `silenceMessage` based on nested group context', async () => {
+    const { stderr } = await runFixture('silence-by-nested-group')
+
+    expect(stderr).toEqual(expect.stringContaining(passString('silence-by-nested-group')))
+  })
 })

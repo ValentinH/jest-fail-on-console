@@ -35,7 +35,8 @@ declare namespace init {
      */
     silenceMessage?: (
       message: string,
-      methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn'
+      methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn',
+      context: { group: string, groups: string[] }
     ) => boolean
 
     /**
