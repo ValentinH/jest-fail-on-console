@@ -57,7 +57,7 @@ const init = ({
       // Don't throw yet though b'c it might be accidentally caught and suppressed.
       const { stack } = new Error()
       if (stack) {
-        unexpectedConsoleCallStacks.push([stack.substr(stack.indexOf('\n') + 1), message])
+        unexpectedConsoleCallStacks.push([stack.substr(stack.indexOf('\n') + 1), [...groups, message].join('\n')])
       }
     }
 
