@@ -99,20 +99,26 @@ const init = ({
     }
     let shouldSkipTest;
 
-    beforeEach(() => {
+    const beforeCallback = () => {
       shouldSkipTest = canSkipTest();
       if (shouldSkipTest) return
 
       console[methodName] = newMethod // eslint-disable-line no-console
       unexpectedConsoleCallStacks.length = 0
-    })
+    };
 
-    afterEach(() => {
+    beforeAll(beforeCallback);
+    beforeEach(beforeCallback);
+
+    const afterCallback = () => {
       if (shouldSkipTest) return
 
       flushUnexpectedConsoleCalls(methodName, unexpectedConsoleCallStacks)
       console[methodName] = originalMethod
-    })
+    };
+
+    afterAll(afterCallback);
+    afterEach(afterCallback);
   }
 
   beforeEach(() => {
