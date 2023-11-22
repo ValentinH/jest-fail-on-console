@@ -4,11 +4,11 @@ const chalk = {
   red: (str) => `\u001b[31m${str}\u001b[0m`,
   gray: (str) => `\u001b[90m${str}\u001b[0m`,
   white: (str) => `\u001b[37m${str}\u001b[0m`,
-  bold: (str) => `\u001b[1m${str}\u001b[0m`
-};
+  bold: (str) => `\u001b[1m${str}\u001b[22m`
+}
 
 const defaultErrorMessage = (methodName, bold) =>
-  `Expected test not to call ${bold(`console.${methodName}()`)}.\n\n` +
+  `Expected test not to call ${(`console.${methodName}()`)}.\n\n` +
   `If the ${methodName} is expected, test for it explicitly by mocking it out using ${bold(
     'jest.spyOn'
   )}(console, '${methodName}').mockImplementation() and test that the warning occurs.`
