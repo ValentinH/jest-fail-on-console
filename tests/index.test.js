@@ -20,7 +20,7 @@ describe('jest-fail-on-console', () => {
   it('errors when console.error() is called', async () => {
     const { stderr } = await runFixture('error')
 
-    expect(stderr).toEqual(expect.stringContaining('Expected test not to call console.error().'))
+    expect(stderr).toEqual(expect.stringMatching(/Expected test not to call .*console.error().*/))
   })
 
   it('does not error when console.error() is called but shouldFailOnError is false', async () => {
@@ -44,7 +44,7 @@ describe('jest-fail-on-console', () => {
   it('errors when console.assert() is called with a failing assertion', async () => {
     const { stderr } = await runFixture('assert-failure')
 
-    expect(stderr).toEqual(expect.stringContaining('Expected test not to call console.assert().'))
+    expect(stderr).toEqual(expect.stringMatching(/Expected test not to call .*console.assert().*/))
   })
 
   it('does not error when console.assert() is called with a passing assertion', async () => {

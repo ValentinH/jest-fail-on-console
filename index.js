@@ -1,5 +1,11 @@
 const util = require('util')
-const chalk = require('chalk')
+
+const chalk = {
+  red: (str) => `\u001B[31m${str}\u001B[39m`,
+  gray: (str) => `\u001B[90m${str}\u001B[39m`,
+  white: (str) => `\u001B[37m${str}\u001B[39m`,
+  bold: (str) => `\u001B[1m${str}\u001B[22m`,
+}
 
 const defaultErrorMessage = (methodName, bold) =>
   `Expected test not to call ${bold(`console.${methodName}()`)}.\n\n` +
@@ -40,7 +46,7 @@ const init = ({
       throw new Error(`${message}\n\n${messages.join('\n\n')}`)
     }
   }
-  const groups = [];
+  const groups = []
 
   const patchConsoleMethod = (methodName) => {
     const unexpectedConsoleCallStacks = []
@@ -48,7 +54,10 @@ const init = ({
     const captureMessage = (format, ...args) => {
       const message = util.format(format, ...args)
 
-      if (silenceMessage && silenceMessage(message, methodName, { group: groups[groups.length - 1], groups })) {
+      if (
+        silenceMessage &&
+        silenceMessage(message, methodName, { group: groups[groups.length - 1], groups })
+      ) {
         return
       }
 
@@ -57,7 +66,10 @@ const init = ({
       // Don't throw yet though b'c it might be accidentally caught and suppressed.
       const { stack } = new Error()
       if (stack) {
-        unexpectedConsoleCallStacks.push([stack.substr(stack.indexOf('\n') + 1), [...groups, message].join('\n')])
+        unexpectedConsoleCallStacks.push([
+          stack.substr(stack.indexOf('\n') + 1),
+          [...groups, message].join('\n'),
+        ])
       }
     }
 
@@ -97,10 +109,10 @@ const init = ({
 
       return false
     }
-    let shouldSkipTest;
+    let shouldSkipTest
 
     beforeEach(() => {
-      shouldSkipTest = canSkipTest();
+      shouldSkipTest = canSkipTest()
       if (shouldSkipTest) return
 
       console[methodName] = newMethod // eslint-disable-line no-console
