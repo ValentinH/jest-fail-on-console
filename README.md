@@ -16,7 +16,7 @@ This is what this utility is doing.
 
 ## Downloads
 
-[![jest-fail-on-console npminsights.com](https://npminsights.com/api/package/readme-image/jest-fail-on-console?v=2023-02-22)](https://npminsights.com/package/jest-fail-on-console)
+[![jest-fail-on-console npminsights](https://npminsights.vercel.app/api/package/readme-image/jest-fail-on-console?v=2023-02-22)](https://npminsights.vercel.app/package/jest-fail-on-console)
 
 ## Install
 
