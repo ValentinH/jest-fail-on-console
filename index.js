@@ -23,8 +23,10 @@ const init = ({
   shouldFailOnWarn = true,
   skipTest,
   silenceMessage,
+  displayMessageAndNotFail,
 } = {}) => {
   const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
+
     if (unexpectedConsoleCallStacks.length > 0) {
       const messages = unexpectedConsoleCallStacks.map(([stack, message]) => {
         const stackLines = stack.split('\n')
@@ -42,8 +44,13 @@ const init = ({
       })
 
       const message = errorMessage(methodName, chalk.bold)
+      const fullErrorMessage = `${message}\n\n${messages.join('\n\n')}`
 
-      throw new Error(`${message}\n\n${messages.join('\n\n')}`)
+      if(typeof displayMessageAndNotFail=== 'function' && displayMessageAndNotFail(fullErrorMessage, methodName)) {
+        return;
+      }
+
+      throw new Error(fullErrorMessage)
     }
   }
   const groups = []
@@ -115,7 +122,11 @@ const init = ({
       shouldSkipTest = canSkipTest()
       if (shouldSkipTest) return
 
-      console[methodName] = newMethod // eslint-disable-line no-console
+      // eslint-disable-next-line no-console
+      console[methodName] = (...args) => {
+        newMethod(...args)
+        originalMethod(...args)
+      }
       unexpectedConsoleCallStacks.length = 0
     })
 
