@@ -1,4 +1,5 @@
 declare namespace init {
+  type ConsoleMethodName = 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn'
   type InitOptions = {
     /**
      * This function lets you define a custom error message. The methodName is the method
@@ -6,7 +7,7 @@ declare namespace init {
      * example: (methodName, bold) => `console.${methodName} is not ${bold('allowed')}`
      */
     errorMessage?: (
-      methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn',
+      methodName: ConsoleMethodName,
       bold: (string: string) => string
     ) => string
 
@@ -35,7 +36,7 @@ declare namespace init {
      */
     silenceMessage?: (
       message: string,
-      methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn',
+      methodName: ConsoleMethodName,
       context: { group: string, groups: string[] }
     ) => boolean
 
