@@ -45,6 +45,8 @@ declare namespace init {
      * skip console checks from this package or not.
      */
     skipTest?: (args: { testName: string; testPath: string }) => boolean
+
+    displayMessageAndNotFail?: (message: string, methodName: ConsoleMethodName) => boolean
   }
 }
 

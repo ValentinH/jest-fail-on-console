@@ -76,4 +76,10 @@ describe('jest-fail-on-console', () => {
 
     expect(stderr).toEqual(expect.stringContaining(passString('silence-by-nested-group')))
   })
+
+  it('does not error if message is silenced with `displayMessageAndNotFail`', async () => {
+    const { stderr } = await runFixture('display-message-and-not-fail')
+
+    expect(stderr).toEqual(expect.stringContaining(passString('display-message-and-not-fail')))
+  })
 })
