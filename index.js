@@ -25,8 +25,7 @@ const init = ({
   silenceMessage,
   allowMessage,
 } = {}) => {
-  const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
-
+  const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks, consoleMethodStore) => {
     if (unexpectedConsoleCallStacks.length > 0) {
       const messages = unexpectedConsoleCallStacks.map(([stack, message]) => {
         const stackLines = stack.split('\n')
@@ -46,7 +45,8 @@ const init = ({
       const message = errorMessage(methodName, chalk.bold)
       const fullErrorMessage = `${message}\n\n${messages.join('\n\n')}`
 
-      if(typeof allowMessage=== 'function' && allowMessage(fullErrorMessage, methodName)) {
+      if(typeof allowMessage === 'function' && allowMessage(fullErrorMessage, methodName)) {
+        consoleMethodStore.originalMethod(fullErrorMessage)
         return;
       }
 
@@ -103,9 +103,10 @@ const init = ({
       groupEnd: newGroupEndMethod,
     }
 
-    const newMethod = methods[methodName] || captureMessage
-
-    let originalMethod = console[methodName]
+    const consoleMethodStore = {
+      originalMethod: console[methodName],
+      newMethod: methods[methodName] || captureMessage
+    }
 
     const canSkipTest = () => {
       const currentTestState = expect.getState()
@@ -118,23 +119,20 @@ const init = ({
     }
     let shouldSkipTest
 
+
     beforeEach(() => {
       shouldSkipTest = canSkipTest()
       if (shouldSkipTest) return
 
-      // eslint-disable-next-line no-console
-      console[methodName] = (...args) => {
-        newMethod(...args)
-        originalMethod(...args)
-      }
+      console[methodName] = consoleMethodStore.newMethod // eslint-disable-line no-console
       unexpectedConsoleCallStacks.length = 0
     })
 
     afterEach(() => {
       if (shouldSkipTest) return
 
-      flushUnexpectedConsoleCalls(methodName, unexpectedConsoleCallStacks)
-      console[methodName] = originalMethod
+      flushUnexpectedConsoleCalls(methodName, unexpectedConsoleCallStacks, consoleMethodStore)
+      console[methodName] = consoleMethodStore.originalMethod
     })
   }
 
