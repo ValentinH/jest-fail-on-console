@@ -46,7 +46,12 @@ declare namespace init {
      */
     skipTest?: (args: { testName: string; testPath: string }) => boolean
 
-    displayMessageAndNotFail?: (message: string, methodName: ConsoleMethodName) => boolean
+    /**
+     * This function is called for every console warn/error.
+     * If true is returned, the message will not cause the tests to fail.
+     * @default false
+     */
+    allowMessage?: (message: string, methodName: ConsoleMethodName) => boolean
   }
 }
 

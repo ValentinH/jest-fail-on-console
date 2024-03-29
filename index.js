@@ -23,7 +23,7 @@ const init = ({
   shouldFailOnWarn = true,
   skipTest,
   silenceMessage,
-  displayMessageAndNotFail,
+  allowMessage,
 } = {}) => {
   const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
 
@@ -46,7 +46,7 @@ const init = ({
       const message = errorMessage(methodName, chalk.bold)
       const fullErrorMessage = `${message}\n\n${messages.join('\n\n')}`
 
-      if(typeof displayMessageAndNotFail=== 'function' && displayMessageAndNotFail(fullErrorMessage, methodName)) {
+      if(typeof allowMessage=== 'function' && allowMessage(fullErrorMessage, methodName)) {
         return;
       }
 
