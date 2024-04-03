@@ -25,7 +25,7 @@ const init = ({
   silenceMessage,
   allowMessage,
 } = {}) => {
-  const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks, consoleMethodStore) => {
+  const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
     if (unexpectedConsoleCallStacks.length > 0) {
       const messages = unexpectedConsoleCallStacks.map(([stack, message]) => {
         const stackLines = stack.split('\n')
@@ -43,28 +43,31 @@ const init = ({
       })
 
       const message = errorMessage(methodName, chalk.bold)
-      const fullErrorMessage = `${message}\n\n${messages.join('\n\n')}`
 
-      if(typeof allowMessage === 'function' && allowMessage(fullErrorMessage, methodName)) {
-        consoleMethodStore.originalMethod(fullErrorMessage)
-        return;
-      }
-
-      throw new Error(fullErrorMessage)
+      throw new Error(`${message}\n\n${messages.join('\n\n')}`)
     }
   }
   const groups = []
 
   const patchConsoleMethod = (methodName) => {
     const unexpectedConsoleCallStacks = []
+    const originalMethod = console[methodName]
 
     const captureMessage = (format, ...args) => {
       const message = util.format(format, ...args)
 
       if (
-        silenceMessage &&
+        typeof silenceMessage === 'function' &&
         silenceMessage(message, methodName, { group: groups[groups.length - 1], groups })
       ) {
+        return
+      }
+
+      if (
+        typeof allowMessage === 'function' &&
+        allowMessage(message, methodName, { group: groups[groups.length - 1], groups })
+      ) {
+        originalMethod(format, ...args)
         return
       }
 
@@ -103,10 +106,7 @@ const init = ({
       groupEnd: newGroupEndMethod,
     }
 
-    const consoleMethodStore = {
-      originalMethod: console[methodName],
-      newMethod: methods[methodName] || captureMessage
-    }
+    const newMethod = methods[methodName] || captureMessage
 
     const canSkipTest = () => {
       const currentTestState = expect.getState()
@@ -119,20 +119,19 @@ const init = ({
     }
     let shouldSkipTest
 
-
     beforeEach(() => {
       shouldSkipTest = canSkipTest()
       if (shouldSkipTest) return
 
-      console[methodName] = consoleMethodStore.newMethod // eslint-disable-line no-console
+      console[methodName] = newMethod // eslint-disable-line no-console
       unexpectedConsoleCallStacks.length = 0
     })
 
     afterEach(() => {
       if (shouldSkipTest) return
 
-      flushUnexpectedConsoleCalls(methodName, unexpectedConsoleCallStacks, consoleMethodStore)
-      console[methodName] = consoleMethodStore.originalMethod
+      flushUnexpectedConsoleCalls(methodName, unexpectedConsoleCallStacks)
+      console[methodName] = originalMethod
     })
   }
 

@@ -6,10 +6,7 @@ declare namespace init {
      * that caused the error, bold is a function that lets you bold subsets of your message.
      * example: (methodName, bold) => `console.${methodName} is not ${bold('allowed')}`
      */
-    errorMessage?: (
-      methodName: ConsoleMethodName,
-      bold: (string: string) => string
-    ) => string
+    errorMessage?: (methodName: ConsoleMethodName, bold: (string: string) => string) => string
 
     /** @default false */
     shouldFailOnAssert?: boolean
@@ -30,14 +27,14 @@ declare namespace init {
     shouldFailOnWarn?: boolean
 
     /**
-     * This function is called for every console warn/error.
+     * This function is called for every console methods.
      * If true is returned, the message will not show in the console
      * and the test won't fail.
      */
     silenceMessage?: (
       message: string,
       methodName: ConsoleMethodName,
-      context: { group: string, groups: string[] }
+      context: { group: string; groups: string[] }
     ) => boolean
 
     /**
@@ -47,10 +44,14 @@ declare namespace init {
     skipTest?: (args: { testName: string; testPath: string }) => boolean
 
     /**
-     * This function is called for every console warn/error.
-     * If true is returned, the message will not cause the tests to fail.
+     * This function is called for every console methods.
+     * If true is returned, the message will not cause the tests to fail and will be logged to the console.
      */
-    allowMessage?: (message: string, methodName: ConsoleMethodName) => boolean
+    allowMessage?: (
+      message: string,
+      methodName: ConsoleMethodName,
+      context: { group: string; groups: string[] }
+    ) => boolean
   }
 }
 
