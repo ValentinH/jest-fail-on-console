@@ -55,17 +55,18 @@ const init = ({
 
     const captureMessage = (format, ...args) => {
       const message = util.format(format, ...args)
+      const context = { group: groups[groups.length - 1], groups }
 
       if (
         typeof silenceMessage === 'function' &&
-        silenceMessage(message, methodName, { group: groups[groups.length - 1], groups })
+        silenceMessage(message, methodName, context)
       ) {
         return
       }
 
       if (
         typeof allowMessage === 'function' &&
-        allowMessage(message, methodName, { group: groups[groups.length - 1], groups })
+        allowMessage(message, methodName, context)
       ) {
         originalMethod(format, ...args)
         return
