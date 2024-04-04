@@ -4,7 +4,6 @@ Utility to make jest tests fail when `console.error()`, `console.warn()`, etc. a
 
 [![version][version-badge]][package] [![MIT License][license-badge]][license] [![PRs Welcome][prs-badge]][prs]
 
-
 ## What problem is this solving?
 
 Jest doesn't fail the tests when there is a `console.error`. In large codebase, we can end up with the test output overloaded by a lot of errors, warnings, etc..
@@ -115,6 +114,33 @@ Use this to make a test fail when a `console.warn()` is logged.
 - Type: `boolean`
 - Default: `true`
 
+### allowMessage
+
+```ts
+// signature
+type allowMessage = (
+  message: string,
+  methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn',
+  context: { group: string; groups: string[] }
+) => boolean
+```
+
+This function is called for every console method supported by this utility.
+If `true` is returned, the message will show in the console and the test won't fail.
+
+Example:
+
+```ts
+failOnConsole({
+  allowMessage: (errorMessage) => {
+    if (/An expected error/.test(errorMessage)) {
+      return true
+    }
+    return false
+  },
+})
+```
+
 ### silenceMessage
 
 ```ts
@@ -122,7 +148,7 @@ Use this to make a test fail when a `console.warn()` is logged.
 type silenceMessage = (
   message: string,
   methodName: 'assert' | 'debug' | 'error' | 'info' | 'log' | 'warn',
-  context: { group: string, groups: string[] }
+  context: { group: string; groups: string[] }
 ) => boolean
 ```
 
@@ -162,7 +188,7 @@ failOnConsole({
     if (ignoreNameList.includes(testName)) {
       return true
     }
-    
+
     return false
   },
 })

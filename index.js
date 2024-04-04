@@ -23,6 +23,7 @@ const init = ({
   shouldFailOnWarn = true,
   skipTest,
   silenceMessage,
+  allowMessage,
 } = {}) => {
   const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
     if (unexpectedConsoleCallStacks.length > 0) {
@@ -50,14 +51,24 @@ const init = ({
 
   const patchConsoleMethod = (methodName) => {
     const unexpectedConsoleCallStacks = []
+    const originalMethod = console[methodName]
 
     const captureMessage = (format, ...args) => {
       const message = util.format(format, ...args)
+      const context = { group: groups[groups.length - 1], groups }
 
       if (
-        silenceMessage &&
-        silenceMessage(message, methodName, { group: groups[groups.length - 1], groups })
+        typeof silenceMessage === 'function' &&
+        silenceMessage(message, methodName, context)
       ) {
+        return
+      }
+
+      if (
+        typeof allowMessage === 'function' &&
+        allowMessage(message, methodName, context)
+      ) {
+        originalMethod(format, ...args)
         return
       }
 
@@ -97,8 +108,6 @@ const init = ({
     }
 
     const newMethod = methods[methodName] || captureMessage
-
-    let originalMethod = console[methodName]
 
     const canSkipTest = () => {
       const currentTestState = expect.getState()
