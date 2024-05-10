@@ -24,6 +24,7 @@ const init = ({
   skipTest,
   silenceMessage,
   allowMessage,
+  shouldPrintMessage = false,
 } = {}) => {
   const flushUnexpectedConsoleCalls = (methodName, unexpectedConsoleCallStacks) => {
     if (unexpectedConsoleCallStacks.length > 0) {
@@ -70,6 +71,10 @@ const init = ({
       ) {
         originalMethod(format, ...args)
         return
+      }
+
+      if (shouldPrintMessage) {
+        originalMethod(format, ...args)
       }
 
       // Capture the call stack now so we can warn about it later.
