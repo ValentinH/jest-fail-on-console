@@ -194,6 +194,14 @@ failOnConsole({
 })
 ```
 
+### shouldPrintMessage
+
+Use this to print the message immediately when called not awaiting the test to finish. This is useful to show the message if there are
+other or earlier test failures which will result in the fail on console error to be hidden by jest.
+
+- Type: `boolean`
+- Default: `false`
+
 ## License
 
 [MIT](https://github.com/ValentinH/jest-fail-on-console/blob/master/LICENSE)

@@ -52,6 +52,9 @@ declare namespace init {
       methodName: ConsoleMethodName,
       context: { group: string; groups: string[] }
     ) => boolean
+
+    /** @default false */
+    shouldPrintMessage?: boolean
   }
 }
 

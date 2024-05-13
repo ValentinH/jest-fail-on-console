@@ -1,4 +1,3 @@
-const fs = require('fs').promises
 const { exec } = require('child_process')
 
 const fixturesDirectory = 'tests/fixtures'
@@ -7,7 +6,7 @@ const runFixture = async (fixtureName) => {
   const configFilePath = `./${fixturesDirectory}/${fixtureName}/jest.config.js`
   const cmd = `./node_modules/.bin/jest ${testFilePath} --config ${configFilePath}`
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     exec(cmd, (error, stdout, stderr) => {
       resolve({ stdout, stderr })
     })
@@ -84,5 +83,21 @@ describe('jest-fail-on-console', () => {
     expect(stdout).toContain('my error message that I do not control');
 
     expect(stderr).toEqual(expect.stringContaining(passString('allow-message')))
+  })
+
+  it('prints the message to the console immediately even though fail on error is enabled', async () => {
+    const { stderr, stdout } = await runFixture('print-message')
+
+    expect(stdout).toContain('console.error');
+    expect(stdout).toContain('my error message that I do not control');
+
+    expect(stderr).toEqual(expect.stringMatching(/Expected test not to call .*console.error().*/));
+  })
+
+  it('prints the message to the console even though there is another reason the test failed', async () => {
+    const { stdout } = await runFixture('print-message-with-other-failure')
+
+    expect(stdout).toContain('console.error');
+    expect(stdout).toContain('my error message that I do not control');
   })
 })
