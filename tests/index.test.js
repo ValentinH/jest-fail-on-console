@@ -100,4 +100,11 @@ describe('jest-fail-on-console', () => {
     expect(stdout).toContain('console.error');
     expect(stdout).toContain('my error message that I do not control');
   })
+
+  it('errors when console.error() called before testing has begun', async () => {
+    const { stderr } = await runFixture('error-before-beforeEach')
+
+    expect(stderr).toContain('console.error');
+    expect(stderr).toContain('console error message out in the wild');
+  })
 })
