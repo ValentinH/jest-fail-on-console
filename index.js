@@ -125,6 +125,12 @@ const init = ({
     }
     let shouldSkipTest
 
+    beforeAll(() => {
+      flushUnexpectedConsoleCalls(methodName, unexpectedConsoleCallStacks)
+    })
+
+    console[methodName] = newMethod
+
     beforeEach(() => {
       shouldSkipTest = canSkipTest()
       if (shouldSkipTest) return
