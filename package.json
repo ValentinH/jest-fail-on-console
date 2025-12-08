@@ -30,5 +30,8 @@
     "package.json",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "peerDependencies": {
+    "@jest/globals": "^27.5.1"
+  }
 }

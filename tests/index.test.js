@@ -1,3 +1,4 @@
+const { describe, expect, it } = require('@jest/globals')
 const { exec } = require('child_process')
 
 const fixturesDirectory = 'tests/fixtures'
