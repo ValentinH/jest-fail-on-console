@@ -36,6 +36,6 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "@jest/globals": "^27.5.1"
+    "@jest/globals": ">=27.5.1"
   }
 }
